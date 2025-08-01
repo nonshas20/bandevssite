@@ -37,7 +37,10 @@
   },
   "scripts": {
     "build": "npm run cf-typegen && tsc -b && vite build",
+    "build:client": "npm run cf-typegen:safe && tsc -p tsconfig.app.json && vite build",
     "cf-typegen": "wrangler types",
+    "cf-typegen:safe": "wrangler types || npm run cf-typegen:fallback",
+    "cf-typegen:fallback": "echo 'Creating fallback worker types...' && node -e \"require('fs').writeFileSync('worker-configuration.d.ts', 'declare namespace Cloudflare { interface Env { DB?: any; } } interface Env extends Cloudflare.Env {}')\"",
     "check": "tsc && vite build && wrangler deploy --dry-run",
     "dev": "vite",
     "lint": "eslint ."
