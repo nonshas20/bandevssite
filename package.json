@@ -12,7 +12,10 @@
     "react-dom": "19.0.0",
     "react-router": "^7.5.3",
     "react-use": "^17.6.0",
+<<<<<<< HEAD
     "resend": "^4.7.0",
+=======
+>>>>>>> 8b74e2ac6625a358be7e02a432224fc9cb5d7d43
     "zod": "^3.24.3"
   },
   "devDependencies": {
@@ -38,10 +41,10 @@
   },
   "scripts": {
     "build": "npm run cf-typegen:safe && tsc -b && vite build",
-    "build:client": "npm run cf-typegen:safe && tsc -b && vite build --mode client",
+    "build:client": "npm run cf-typegen:safe && tsc -p tsconfig.app.json && vite build",
     "cf-typegen": "wrangler types",
-    "cf-typegen:safe": "npm run cf-typegen || npm run cf-typegen:fallback",
-    "cf-typegen:fallback": "mkdir -p src && echo 'interface Env { DB: any; RESEND_API_KEY: string; }' > src/worker-configuration.d.ts",
+    "cf-typegen:safe": "wrangler types || npm run cf-typegen:fallback",
+    "cf-typegen:fallback": "echo 'Creating fallback worker types...' && node -e \"require('fs').writeFileSync('worker-configuration.d.ts', 'declare namespace Cloudflare { interface Env { DB?: any; RESEND_API_KEY?: string; } } interface Env extends Cloudflare.Env {}')\"",
     "check": "tsc && vite build && wrangler deploy --dry-run",
     "dev": "vite",
     "lint": "eslint ."
